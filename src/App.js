@@ -4,6 +4,7 @@ import Menu from './Menu';
 import ActorList from './actor/ActorList';
 import FilmSearch from './film/FilmSearch';
 import FilmDetails from './film/FilmDetails';
+import Rental from './rental/Rental';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/actor'element={<ActorList />}></Route>
         <Route path='/film-details/:id'element={<FilmDetails />}></Route>
         <Route path='/film-search'element={<FilmSearch />}></Route>
+        <Route path='/rental'element={<Rental />}></Route>
       </Routes>
     </Router>
   );

@@ -7,6 +7,7 @@ function Menu() {
             <Link to ="/actor">Actor</Link>
             <Link to ="/film-details/:id">Film Details</Link>
             <Link to ="/film-search">Film Search</Link>
+            <Link to ="/rental">Rental</Link>
         </nav>
      );
 }

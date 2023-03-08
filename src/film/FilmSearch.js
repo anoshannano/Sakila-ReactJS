@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";    
+import { json } from "react-router-dom";
 
 function FilmSearch() {
     let [film, setFilm] = useState([]);
@@ -11,26 +12,16 @@ function FilmSearch() {
 
         if(newTitle.length >2){
             setShow(true);
-            
+            let url='http://localhost:8080/search-film?title='+newTitle;
+            let param = {method: 'GET'};
+            fetch(url,param)
+            .then(data=> data.json())
+            .then(json => setFilm(json));
         }
         else{
-            setShow(false)
+            setShow(false);
         };
     }
-
-    useEffect(()=> {
-        let url = "http://localhost:8080/all-film";
-        let param = { method: 'GET'};
-
-        fetch(url,param).then((data) => {
-            return data.json();
-        }) .then((json) => {
-            console.log(json);
-            setFilm(json);
-        }).catch((err)=>{
-        console.log(err);
-        })
-    },[]);
 
     return (  
         <div className="container">

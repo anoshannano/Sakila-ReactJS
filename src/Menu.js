@@ -9,6 +9,7 @@ function Menu() {
             <Link to ="/actor">Actor</Link>
             <Link to ="/film-search">Film Search</Link>
             <Link to ="/rental">Rental</Link>
+            <Link to ="/guess-game">Guess Game</Link>
             </div>
         </div>
      );

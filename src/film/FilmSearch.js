@@ -1,50 +1,77 @@
-import { useEffect, useState } from "react";    
-import { json } from "react-router-dom";
+import { useState } from "react";
+import FilmDetails from './FilmDetails';
+import FilmEdit from "./FilmEdit";
 
 function FilmSearch() {
-    let [film, setFilm] = useState([]);
-    let[title,setTitle] = useState('');
-    let[show,setShow]=useState(false);
+    let [title, setTitle] = useState('');
+    let [show, setShow] = useState(false);
+    let [films, setFilms] = useState([]);
+    let [filmId, setFilmId] = useState(1);
+    let [isClicked, setIsClicked] = useState(false);
+    let [showEdit, setShowEdit] = useState(false);
 
-    let doSearch= (event) => {
+    let doSearch = (event) => {
+        setIsClicked(false);
+        console.log(event.target.value);
         let newTitle = event.target.value;
         setTitle(newTitle);
 
-        if(newTitle.length >2){
+        if (newTitle.length > 2) {
             setShow(true);
-            let url='http://localhost:8080/search-film?title='+newTitle;
-            let param = {method: 'GET'};
-            fetch(url,param)
-            .then(data=> data.json())
-            .then(json => setFilm(json));
-        }
-        else{
+            // go and fetch data
+            let url = 'http://localhost:8080/search-film?title=' + newTitle;
+            let param = { method : 'GET' };
+            fetch(url, param)
+            .then(data => data.json())
+            .then(json => setFilms(json));
+        } else
             setShow(false);
-        };
     }
 
-    return (  
-        <div className="container">
-            <h1>Film List</h1>
-            <input type="text" placeholder="Search Film Title" onChange={doSearch} />
-            {show && <table className="table table-striped">
+    const myTable = () => {
+        return (
+            <table className="table">
                 <thead>
                     <tr>
-                    <th>No</th>
-                    <th>Title</th>
-                    <th>Description</th>
+                        <th>No</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {film.map((f,no)=>(
-                        <tr key={f.filmId}>
-                        <td>{no+1}.</td>
-                        <td>{f.title}</td>
-                        <td>{f.description}</td>
-                        </tr>
+                    {films.map((film, no) => (
+                    <tr key={film.filmId}>
+                        <td>{ no + 1 }</td>
+                        <td><a onClick={ () => { setFilmId(film.filmId); setIsClicked(true); }} href="##">{ film.title }</a></td>
+                        <td>{ film.description }</td>
+                        <td>
+                            <button 
+                            onClick={() => {setShowEdit(true); setFilmId(film.filmId)}}
+                            className="btn btn-primary btn-sm">Edit</button>
+                        </td>
+                    </tr>
                     ))}
                 </tbody>
-            </table>}
+            </table>
+        );
+    }
+
+    return (
+        <div>
+            <div className="row">
+                <div className="col-md-8">
+                    <h2>Film Search</h2>
+                    <input type="text" className="form-control" placeholder="search film title..." onChange={ doSearch } />
+                    { show && myTable() }
+                    { showEdit && <FilmEdit isShow={showEdit} 
+                    filmId={filmId} key={filmId} /> }
+                </div>
+
+                <div className="col-md-4">
+                    { isClicked && <FilmDetails filmId={ filmId } key={ filmId } /> }
+                </div>
+            </div>
         </div>
     );
 }

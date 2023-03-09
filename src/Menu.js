@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 
 function Menu() {
     return ( 
-        <nav>
+        <div className="navbar">
+            <h1>Sakila Store</h1>
+            <div className="links">
             <Link to ="/film">Film</Link>
             <Link to ="/actor">Actor</Link>
-            <Link to ="/film-details/:id">Film Details</Link>
             <Link to ="/film-search">Film Search</Link>
             <Link to ="/rental">Rental</Link>
-        </nav>
+            </div>
+        </div>
      );
 }
 

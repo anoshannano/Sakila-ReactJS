@@ -1,45 +1,39 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
+function FilmDetail(props) {
+    let [film, setFilm] = useState({ actors: []});
+    let {id} = useParams();
+    
+    // read from props only if no param passed
+    if (id == null)
+        id = props.filmId;
 
-function FilmDetails(props){
+    useEffect(() => {
+        let url = 'http://localhost:8080/find-film-actor/'+id;
+        let param = { method : 'GET' };
+        fetch(url, param)
+        .then(data => data.json())
+        .then(json => {
+            console.log(json);
+            setFilm(json)
+        })
+        .catch(err => console.log(err));
+    }, []);
 
-let [filmActor, setfilmActor] = useState({actors:[]});
-let {id} = useParams();
-
-if(id==null)
-    {id= props.filmId;}
-   
-    useEffect(()=> {
-    let url = "http://localhost:8080/find-film-actor/"+id;
-    let param = { method: 'GET'};
-
-    fetch(url,param).then((data) => {
-        return data.json();
-    }) .then((json) => {
-        console.log(json);
-        setfilmActor(json);
-    }).catch((err)=>{
-    console.log(err);
-    })
-    },[]);
-
-
-    return (  
-            <div className="card border-dark mb-3">
-            <div className="card-header">filmActor Details</div>
-            <div className="card-body text-dark">
-                <h5 className="card-title">{ filmActor.title }</h5>
-                <p className="card-text">{ filmActor.description }</p>
-                <ul className="card-text">
-                    {
-                        filmActor.actors.map((actor) => (
-                            <li key={actor.actorId}>{actor.firstName} {actor.lastName}</li>
-                        ))}
-                </ul>
-            </div>
-            </div>
-        );
+    return (
+        <div>
+            <h1>Film Detail</h1>
+            <div>Title : { film.title }</div>
+            <br />
+            <div>Description : { film.description }</div>
+            <ul>
+                { film.actors.map((actor) => (
+                    <li key={actor.actorId}>{ actor.firstName } { actor.lastName }</li>
+                ))}
+            </ul>
+        </div>
+    );
 }
 
-export default FilmDetails;
+export default FilmDetail;
